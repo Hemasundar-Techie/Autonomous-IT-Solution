@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Inframind Season 4- Autonomous IT Solution(This Template Included with VPC,Public & Private Subnets,Route Tables, SecurityGroups, Apache Php server,MYSQL server,Application Load Balncer and Auto Scalling Group)
+Description: Inframind Season 4- Autonomous IT Solution(This is an AWS CloudFormation Template which Template Included with VPC,Public & Private Subnets,Route Tables, SecurityGroups, Apache Php server,MYSQL server,Application Load Balncer and Auto Scalling Group)
 Resources:
   privSubnet1:
     Type: 'AWS::EC2::Subnet'
