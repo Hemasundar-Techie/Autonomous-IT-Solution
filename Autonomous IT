@@ -1,5 +1,9 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Inframind Season 4- Autonomous IT Solution(This is an AWS CloudFormation Template which Template Included with VPC,Public & Private Subnets,Route Tables, SecurityGroups, Apache Php server,MYSQL server,Application Load Balncer and Auto Scalling Group)
+Description: >-
+  Inframind Season 4- Autonomous IT Solution(This is an AWS CloudFormation
+  Template which Template Included with VPC,Public & Private Subnets,Route
+  Tables, SecurityGroups, Apache Php server,MYSQL server,Application Load
+  Balncer and Auto Scalling Group)
 Resources:
   privSubnet1:
     Type: 'AWS::EC2::Subnet'
@@ -13,6 +17,9 @@ Resources:
         - Key: SubnetType
           Value: Private
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 4c0fb54a-774c-4fc5-9910-95947e50f74d
   privSubnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -25,31 +32,49 @@ Resources:
         - Key: SubnetType
           Value: Private
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: ed9815ff-e779-47db-8b1d-e4e17a49de13
   privSubnetRouteTableAssociation1:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       RouteTableId: !Ref NatRouteTable1
       SubnetId: !Ref privSubnet1
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 18df7a86-65b8-4841-859d-f964587101b0
   privSubnetRouteTableAssociation2:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       RouteTableId: !Ref NatRouteTable2
       SubnetId: !Ref privSubnet2
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 24026253-e276-434d-8d7b-aed073c71819
   IGateway:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
         - Key: Name
           Value: IGateway
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 4cf57135-9477-41e2-802a-202d6c183ce4
   AttachInternetGateway:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
       InternetGatewayId: !Ref IGateway
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: e1c94314-e532-43ac-8050-e3b60512de37
   NatEIP1:
     Type: 'AWS::EC2::EIP'
     Properties:
       Domain: vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 5ab8c1b8-8f27-4d36-830f-dfa4cb1c276a
   NatGateway1:
     Type: 'AWS::EC2::NatGateway'
     DependsOn: AttachInternetGateway
@@ -58,12 +83,18 @@ Resources:
         - NatEIP1
         - AllocationId
       SubnetId: !Ref PubSubnet1
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 0fd0dcd9-457d-4240-9fd4-d7cb709e362e
   NatRoute1:
     Type: 'AWS::EC2::Route'
     Properties:
       RouteTableId: !Ref NatRouteTable1
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway1
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 44230144-bd69-47ac-a231-831d15f290aa
   NatRouteTable1:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -73,10 +104,16 @@ Resources:
         - Key: Network
           Value: Public
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 09ce3bc0-b11e-4bfc-9cee-7f604b057b9b
   NatEIP2:
     Type: 'AWS::EC2::EIP'
     Properties:
       Domain: vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 980423fb-62cb-40ca-a560-4f0c15087cff
   NatGateway2:
     Type: 'AWS::EC2::NatGateway'
     DependsOn: AttachInternetGateway
@@ -85,12 +122,18 @@ Resources:
         - NatEIP2
         - AllocationId
       SubnetId: !Ref PubSubnet2
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 88bb6796-b32f-494b-a875-9b84c3e0f126
   NatRoute2:
     Type: 'AWS::EC2::Route'
     Properties:
       RouteTableId: !Ref NatRouteTable2
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway2
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 631834ec-a14e-406a-8155-b078140dc90a
   NatRouteTable2:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -100,6 +143,9 @@ Resources:
         - Key: Network
           Value: Public
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 68793b21-9649-4f9b-b6d9-f8e81b2bd242
   PublicRoute:
     Type: 'AWS::EC2::Route'
     DependsOn: AttachInternetGateway
@@ -107,6 +153,9 @@ Resources:
       RouteTableId: !Ref PubRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref IGateway
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 46cf0861-084a-49d9-9f9c-17e3562be66b
   PubRouteTable:
     Type: 'AWS::EC2::RouteTable'
     Properties:
@@ -116,16 +165,25 @@ Resources:
         - Key: Network
           Value: Public
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 31b1ad2f-862a-4af0-8584-718de2afc82e
   PubRouteTableAssociation1:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       SubnetId: !Ref PubSubnet1
       RouteTableId: !Ref PubRouteTable
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 8048d0e9-9d0c-4cf0-90d9-5d60730aeca5
   PubRouteTableAssociation2:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       SubnetId: !Ref PubSubnet2
       RouteTableId: !Ref PubRouteTable
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: ab7a581d-0342-40e6-b204-a65475c0d8af
   PubSubnet1:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -138,6 +196,9 @@ Resources:
         - Key: SubnetType
           Value: Public
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 00f4ccd5-b390-43b3-af8b-76af6e1977a5
   PubSubnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -150,6 +211,9 @@ Resources:
         - Key: SubnetType
           Value: Public
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 408b0e1b-85d9-45cf-b044-45078ce6ebdb
   Vpc:
     Type: 'AWS::EC2::VPC'
     Properties:
@@ -159,6 +223,9 @@ Resources:
       Tags:
         - Key: Name
           Value: Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 8b229e29-b904-411f-a4af-9ad57dc37987
   ApplicationLoadBalancer:
     Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
     Properties:
@@ -167,6 +234,9 @@ Resources:
         - !Ref PubSubnet2
       SecurityGroups:
         - !Ref WebServerSecurityGroup
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: fc82f37d-c902-4f0d-bf23-cb63421d60f4
   ALBListener:
     Type: 'AWS::ElasticLoadBalancingV2::Listener'
     Properties:
@@ -176,6 +246,9 @@ Resources:
       LoadBalancerArn: !Ref ApplicationLoadBalancer
       Port: '80'
       Protocol: HTTP
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: ec3c7ba1-652c-4668-9b7a-5ae72478e9a0
   ALBTargetGroup:
     Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
     Properties:
@@ -194,6 +267,9 @@ Resources:
           Value: lb_cookie
         - Key: stickiness.lb_cookie.duration_seconds
           Value: '30'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 86084e54-0b3a-4600-94e3-5d27794f5227
   WebServerSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -210,6 +286,9 @@ Resources:
           ToPort: '22'
           CidrIp: !Ref SSHLocation
       VpcId: !Ref Vpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: d4df1cc0-09bd-49a8-9c84-63b418495a22
   WebServerGroup:
     Type: 'AWS::AutoScaling::AutoScalingGroup'
     Properties:
@@ -224,7 +303,10 @@ Resources:
       MaxSize: '3'
       TargetGroupARNs:
         - !Ref ALBTargetGroup
-  DBEC2SecurityGroup:
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 6f17c5e9-0a14-4f74-9b00-20a4574befdd
+  MySqlServerToEC2SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Open database for access
@@ -234,231 +316,48 @@ Resources:
           ToPort: '3306'
           SourceSecurityGroupId: !Ref WebServerSecurityGroup
       VpcId: !Ref Vpc
-  MySQLServer:
-    Type: 'AWS::EC2::Instance'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: df363dba-b7f8-43a9-9dd9-58a507fd0df1
+  MySqlServerSubnetGp:
+    Type: 'AWS::RDS::DBSubnetGroup'
+    Properties:
+      DBSubnetGroupDescription: !Join 
+        - ''
+        - - 'RDS Subnet Group for '
+          - !Ref 'AWS::StackName'
+      SubnetIds:
+        - !Ref privSubnet1
+        - !Ref privSubnet2
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 305ef31f-eb2e-48a5-97f7-3bb14192a5f1
+  MySqlServer:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      DBName: !Ref DBName
+      Engine: MySQL
+      MultiAZ: !Ref MultiAZDatabase
+      MasterUsername: !Ref DBUser
+      MasterUserPassword: !Ref DBPassword
+      DBInstanceClass: !Ref DBClass
+      AllocatedStorage: 5
+      DBSubnetGroupName: !Ref MySqlServerSubnetGp
+      VPCSecurityGroups:
+        - !Ref MySqlServerToEC2SecurityGroup
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 51ae513d-0c48-4009-bf57-6733e7af3891
+  LaunchConfig:
+    Type: 'AWS::AutoScaling::LaunchConfiguration'
     Metadata:
       'AWS::CloudFormation::Init':
         configSets:
           wordpress_install:
             - install_cfn
             - install_wordpress
-            - configure_wordpress
         install_cfn:
           files:
-            /etc/cfn/cfn-hup.conf:
-              content: !Join 
-                - ''
-                - - |
-                    [main]
-                  - stack=
-                  - !Ref 'AWS::StackId'
-                  - |+
-
-                  - region=
-                  - !Ref 'AWS::Region'
-                  - |+
-
-              mode: '000400'
-              owner: root
-              group: root
-            /etc/cfn/hooks.d/cfn-auto-reloader.conf:
-              content: !Join 
-                - ''
-                - - |
-                    [cfn-auto-reloader-hook]
-                  - |
-                    triggers=post.update
-                  - >
-                    path=Resources.MySQLServer.Metadata.AWS::CloudFormation::Init
-                  - 'action=/opt/aws/bin/cfn-init -v '
-                  - '         --stack '
-                  - !Ref 'AWS::StackName'
-                  - '         --resource WebServer '
-                  - '         --configsets wordpress_install '
-                  - '         --region '
-                  - !Ref 'AWS::Region'
-                  - |+
-
-              mode: '000400'
-              owner: root
-              group: root
-          services:
-            sysvinit:
-              cfn-hup:
-                enabled: 'true'
-                ensureRunning: 'true'
-                files:
-                  - /etc/cfn/cfn-hup.conf
-                  - /etc/cfn/hooks.d/cfn-auto-reloader.conf
-        install_wordpress:
-          packages:
-            yum:
-              php73: []
-              php73-mysqlnd: []
-              mysql57: []
-              mysql57-server: []
-              mysql57-devel: []
-              mysql57-libs: []
-              httpd24: []
-          sources:
-            /var/www/html: 'http://wordpress.org/latest.tar.gz'
-          files:
-            /tmp/setup.mysql:
-              content: !Join 
-                - ''
-                - - 'CREATE DATABASE '
-                  - !Ref DBName
-                  - |
-                    ;
-                  - CREATE USER '
-                  - !Ref DBUser
-                  - '''@''localhost'' IDENTIFIED BY '''
-                  - !Ref DBPassword
-                  - |
-                    ';
-                  - 'GRANT ALL ON '
-                  - !Ref DBName
-                  - .* TO '
-                  - !Ref DBUser
-                  - |
-                    '@'localhost';
-                  - |
-                    FLUSH PRIVILEGES;
-              mode: '000400'
-              owner: root
-              group: root
-            /tmp/create-wp-config:
-              content: !Join 
-                - ''
-                - - |
-                    #!/bin/bash -xe
-                  - >
-                    cp /var/www/html/wordpress/wp-config-sample.php
-                    /var/www/html/wordpress/wp-config.php
-                  - sed -i "s/'database_name_here'/'
-                  - !Ref DBName
-                  - |
-                    '/g" wp-config.php
-                  - sed -i "s/'username_here'/'
-                  - !Ref DBUser
-                  - |
-                    '/g" wp-config.php
-                  - sed -i "s/'password_here'/'
-                  - !Ref DBPassword
-                  - |
-                    '/g" wp-config.php
-              mode: '000500'
-              owner: root
-              group: root
-          services:
-            sysvinit:
-              httpd:
-                enabled: 'true'
-                ensureRunning: 'true'
-              mysqld:
-                enabled: 'true'
-                ensureRunning: 'true'
-        configure_wordpress:
-          commands:
-            01_set_mysql_root_password:
-              command: !Join 
-                - ''
-                - - mysqladmin -u root password '
-                  - !Ref DBRootPassword
-                  - ''''
-              test: !Join 
-                - ''
-                - - '$(mysql '
-                  - !Ref DBName
-                  - ' -u root --password='''
-                  - !Ref DBRootPassword
-                  - ''' >/dev/null 2>&1 </dev/null); (( $? != 0 ))'
-            02_create_database:
-              command: !Join 
-                - ''
-                - - mysql -u root --password='
-                  - !Ref DBRootPassword
-                  - ''' < /tmp/setup.mysql'
-              test: !Join 
-                - ''
-                - - '$(mysql '
-                  - !Ref DBName
-                  - ' -u root --password='''
-                  - !Ref DBRootPassword
-                  - ''' >/dev/null 2>&1 </dev/null); (( $? != 0 ))'
-            03_configure_wordpress:
-              command: /tmp/create-wp-config
-              cwd: /var/www/html/wordpress
-    Properties:
-      ImageId: !FindInMap 
-        - AWSRegionArch2AMI
-        - !Ref 'AWS::Region'
-        - !FindInMap 
-          - AWSInstanceType2Arch
-          - !Ref InstanceType
-          - Arch
-      NetworkInterfaces:
-        - DeleteOnTermination: true
-          DeviceIndex: '0'
-          SubnetId: !Ref PubSubnet1
-          GroupSet:
-            - !Ref DBEC2SecurityGroup
-          AssociatePublicIpAddress: true
-      InstanceType: t2.micro
-      KeyName: !Ref KeyName
-      UserData: !Base64 
-        'Fn::Join':
-          - ''
-          - - |
-              #!/bin/bash -xe
-            - |
-              yum update -y aws-cfn-bootstrap
-            - '/opt/aws/bin/cfn-init -v '
-            - '         --stack '
-            - !Ref 'AWS::StackName'
-            - '         --resource MySQLServer '
-            - '         --configsets wordpress_install '
-            - '         --region '
-            - !Ref 'AWS::Region'
-            - |+
-
-            - '/opt/aws/bin/cfn-signal -e $? '
-            - '         --stack '
-            - !Ref 'AWS::StackName'
-            - '         --resource MySQLServer '
-            - '         --region '
-            - !Ref 'AWS::Region'
-            - |+
-
-    CreationPolicy:
-      ResourceSignal:
-        Timeout: PT15M
-  LaunchConfig:
-    Type: 'AWS::AutoScaling::LaunchConfiguration'
-    Metadata:
-      Comment: Install a simple application
-      'AWS::CloudFormation::Init':
-        config:
-          packages:
-            yum:
-              httpd24: []
-          files:
-            /var/www/html/index.html:
-              content: !Join 
-                - |+
-
-                - - <img src="
-                  - !FindInMap 
-                    - Region2Examples
-                    - !Ref 'AWS::Region'
-                    - Examples
-                  - /cloudformation_graphic.png" alt="AWS CloudFormation Logo"/>
-                  - >-
-                    <h1>Congratulations, you have successfully launched the AWS
-                    CloudFormation sample.</h1>
-              mode: '000644'
-              owner: root
-              group: root
             /etc/cfn/cfn-hup.conf:
               content: !Join 
                 - ''
@@ -488,22 +387,72 @@ Resources:
                   - '         --stack '
                   - !Ref 'AWS::StackName'
                   - '         --resource LaunchConfig '
+                  - '         --configsets wordpress_install '
                   - '         --region '
                   - !Ref 'AWS::Region'
-                  - ' '
-                  - |
-                    runas=root
+                  - |+
+
+              mode: '000400'
+              owner: root
+              group: root
           services:
             sysvinit:
-              httpd:
-                enabled: 'true'
-                ensureRunning: 'true'
               cfn-hup:
                 enabled: 'true'
                 ensureRunning: 'true'
                 files:
                   - /etc/cfn/cfn-hup.conf
                   - /etc/cfn/hooks.d/cfn-auto-reloader.conf
+        install_wordpress:
+          packages:
+            yum:
+              php73: []
+              php73-mysqlnd: []
+              mysql57: []
+              httpd24: []
+          sources:
+            /var/www/html: 'http://wordpress.org/latest.tar.gz'
+          files:
+            /tmp/create-wp-config:
+              content: !Join 
+                - ''
+                - - |
+                    #!/bin/bash
+                  - >
+                    cp /var/www/html/wordpress/wp-config-sample.php
+                    /var/www/html/wordpress/wp-config.php
+                  - sed -i "s/'database_name_here'/'
+                  - !Ref DBName
+                  - |
+                    '/g" wp-config.php
+                  - sed -i "s/'username_here'/'
+                  - !Ref DBUser
+                  - |
+                    '/g" wp-config.php
+                  - sed -i "s/'password_here'/'
+                  - !Ref DBPassword
+                  - |
+                    '/g" wp-config.php
+                  - sed -i "s/'localhost'/'
+                  - !GetAtt 
+                    - MySqlServer
+                    - Endpoint.Address
+                  - |
+                    '/g" wp-config.php
+              mode: '000500'
+              owner: root
+              group: root
+          commands:
+            01_configure_wordpress:
+              command: /tmp/create-wp-config
+              cwd: /var/www/html/wordpress
+          services:
+            sysvinit:
+              httpd:
+                enabled: 'true'
+                ensureRunning: 'true'
+      'AWS::CloudFormation::Designer':
+        id: 6bd6d47b-48f6-479b-ac76-e506649fcbca
     Properties:
       ImageId: !FindInMap 
         - AWSRegionArch2AMI
@@ -527,16 +476,18 @@ Resources:
             - '         --stack '
             - !Ref 'AWS::StackName'
             - '         --resource LaunchConfig '
+            - '         --configsets wordpress_install '
             - '         --region '
             - !Ref 'AWS::Region'
-            - ' '
+            - |+
+
             - '/opt/aws/bin/cfn-signal -e $? '
             - '         --stack '
             - !Ref 'AWS::StackName'
             - '         --resource WebServerGroup '
             - '         --region '
             - !Ref 'AWS::Region'
-            - ' '
+            - ''
   WebServerScaleUpPolicy:
     Type: 'AWS::AutoScaling::ScalingPolicy'
     Properties:
@@ -544,6 +495,9 @@ Resources:
       AutoScalingGroupName: !Ref WebServerGroup
       Cooldown: '60'
       ScalingAdjustment: '1'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 90b6cf6e-79ea-4456-a2bb-750443811443
   WebServerScaleDownPolicy:
     Type: 'AWS::AutoScaling::ScalingPolicy'
     Properties:
@@ -551,6 +505,9 @@ Resources:
       AutoScalingGroupName: !Ref WebServerGroup
       Cooldown: '60'
       ScalingAdjustment: '-1'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 1fc4848f-d2c7-4e46-93bd-59b8e596da92
   CPUAlarmHigh:
     Type: 'AWS::CloudWatch::Alarm'
     Properties:
@@ -567,6 +524,9 @@ Resources:
         - Name: AutoScalingGroupName
           Value: !Ref WebServerGroup
       ComparisonOperator: GreaterThanThreshold
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 4789e762-4d23-4a66-bb67-2948ea1c55c8
   CPUAlarmLow:
     Type: 'AWS::CloudWatch::Alarm'
     Properties:
@@ -583,11 +543,22 @@ Resources:
         - Name: AutoScalingGroupName
           Value: !Ref WebServerGroup
       ComparisonOperator: LessThanThreshold
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 715f2314-cab8-44c8-bdfe-54922d3aba1a
 Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
     Type: 'AWS::EC2::KeyPair::KeyName'
     ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  MultiAZDatabase:
+    Default: 'false'
+    Description: Create a Multi-AZ MySQL Amazon RDS database instance
+    Type: String
+    AllowedValues:
+      - 'true'
+      - 'false'
+    ConstraintDescription: must be either true or false.
   InstanceType:
     Description: WebServer EC2 instance type
     Type: String
@@ -680,3 +651,421 @@ Mappings:
       PV64: ami-7f77b31f
       HVM64: ami-f2d3638a
       HVMG2: ami-ee15a196
+
+Metadata:
+  'AWS::CloudFormation::Designer':
+    8b229e29-b904-411f-a4af-9ad57dc37987:
+      size:
+        width: 970
+        height: 790
+      position:
+        x: 60
+        'y': 90
+      z: 1
+      embeds:
+        - d4df1cc0-09bd-49a8-9c84-63b418495a22
+        - df363dba-b7f8-43a9-9dd9-58a507fd0df1
+        - 86084e54-0b3a-4600-94e3-5d27794f5227
+        - 408b0e1b-85d9-45cf-b044-45078ce6ebdb
+        - 00f4ccd5-b390-43b3-af8b-76af6e1977a5
+        - 31b1ad2f-862a-4af0-8584-718de2afc82e
+        - 68793b21-9649-4f9b-b6d9-f8e81b2bd242
+        - 09ce3bc0-b11e-4bfc-9cee-7f604b057b9b
+        - ed9815ff-e779-47db-8b1d-e4e17a49de13
+        - 4c0fb54a-774c-4fc5-9910-95947e50f74d
+    d4df1cc0-09bd-49a8-9c84-63b418495a22:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 90
+        'y': 750
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds: []
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    6bd6d47b-48f6-479b-ac76-e506649fcbca:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1080
+        'y': 90
+      z: 1
+      embeds: []
+      isassociatedwith:
+        - d4df1cc0-09bd-49a8-9c84-63b418495a22
+    df363dba-b7f8-43a9-9dd9-58a507fd0df1:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 210
+        'y': 750
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds: []
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    86084e54-0b3a-4600-94e3-5d27794f5227:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 330
+        'y': 750
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds: []
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    408b0e1b-85d9-45cf-b044-45078ce6ebdb:
+      size:
+        width: 220
+        height: 140
+      position:
+        x: 690
+        'y': 150
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds:
+        - 88bb6796-b32f-494b-a875-9b84c3e0f126
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    00f4ccd5-b390-43b3-af8b-76af6e1977a5:
+      size:
+        width: 250
+        height: 190
+      position:
+        x: 390
+        'y': 450
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds:
+        - 0fd0dcd9-457d-4240-9fd4-d7cb709e362e
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    6f17c5e9-0a14-4f74-9b00-20a4574befdd:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1200
+        'y': 90
+      z: 1
+      embeds: []
+      isassociatedwith:
+        - 6bd6d47b-48f6-479b-ac76-e506649fcbca
+        - 86084e54-0b3a-4600-94e3-5d27794f5227
+      iscontainedinside:
+        - 00f4ccd5-b390-43b3-af8b-76af6e1977a5
+        - 408b0e1b-85d9-45cf-b044-45078ce6ebdb
+    1fc4848f-d2c7-4e46-93bd-59b8e596da92:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1080
+        'y': 210
+      z: 1
+      embeds: []
+      isassociatedwith:
+        - 6f17c5e9-0a14-4f74-9b00-20a4574befdd
+    715f2314-cab8-44c8-bdfe-54922d3aba1a:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1200
+        'y': 210
+      z: 1
+      embeds: []
+    90b6cf6e-79ea-4456-a2bb-750443811443:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1080
+        'y': 330
+      z: 1
+      embeds: []
+      isassociatedwith:
+        - 6f17c5e9-0a14-4f74-9b00-20a4574befdd
+    4789e762-4d23-4a66-bb67-2948ea1c55c8:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1200
+        'y': 330
+      z: 1
+      embeds: []
+    fc82f37d-c902-4f0d-bf23-cb63421d60f4:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1080
+        'y': 450
+      z: 1
+      embeds: []
+      isassociatedwith:
+        - d4df1cc0-09bd-49a8-9c84-63b418495a22
+      iscontainedinside:
+        - 00f4ccd5-b390-43b3-af8b-76af6e1977a5
+        - 408b0e1b-85d9-45cf-b044-45078ce6ebdb
+    ec3c7ba1-652c-4668-9b7a-5ae72478e9a0:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1200
+        'y': 450
+      z: 1
+      embeds: []
+    31b1ad2f-862a-4af0-8584-718de2afc82e:
+      size:
+        width: 230
+        height: 150
+      position:
+        x: 90
+        'y': 450
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds:
+        - 46cf0861-084a-49d9-9f9c-17e3562be66b
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    ab7a581d-0342-40e6-b204-a65475c0d8af:
+      source:
+        id: 31b1ad2f-862a-4af0-8584-718de2afc82e
+      target:
+        id: 408b0e1b-85d9-45cf-b044-45078ce6ebdb
+      z: 2
+    8048d0e9-9d0c-4cf0-90d9-5d60730aeca5:
+      source:
+        id: 31b1ad2f-862a-4af0-8584-718de2afc82e
+      target:
+        id: 00f4ccd5-b390-43b3-af8b-76af6e1977a5
+      z: 2
+    68793b21-9649-4f9b-b6d9-f8e81b2bd242:
+      size:
+        width: 200
+        height: 140
+      position:
+        x: 390
+        'y': 150
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds:
+        - 631834ec-a14e-406a-8155-b078140dc90a
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    980423fb-62cb-40ca-a560-4f0c15087cff:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1080
+        'y': 570
+      z: 1
+      embeds: []
+    09ce3bc0-b11e-4bfc-9cee-7f604b057b9b:
+      size:
+        width: 200
+        height: 150
+      position:
+        x: 90
+        'y': 150
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds:
+        - 44230144-bd69-47ac-a231-831d15f290aa
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    5ab8c1b8-8f27-4d36-830f-dfa4cb1c276a:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 1200
+        'y': 570
+      z: 1
+      embeds: []
+    4cf57135-9477-41e2-802a-202d6c183ce4:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: -100
+        'y': 370
+      z: 1
+      embeds: []
+    e1c94314-e532-43ac-8050-e3b60512de37:
+      source:
+        id: 8b229e29-b904-411f-a4af-9ad57dc37987
+      target:
+        id: 4cf57135-9477-41e2-802a-202d6c183ce4
+      z: 1
+    46cf0861-084a-49d9-9f9c-17e3562be66b:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 120
+        'y': 510
+      z: 3
+      parent: 31b1ad2f-862a-4af0-8584-718de2afc82e
+      embeds: []
+      isassociatedwith:
+        - 4cf57135-9477-41e2-802a-202d6c183ce4
+      iscontainedinside:
+        - 31b1ad2f-862a-4af0-8584-718de2afc82e
+        - 31b1ad2f-862a-4af0-8584-718de2afc82e
+      dependson:
+        - e1c94314-e532-43ac-8050-e3b60512de37
+    88bb6796-b32f-494b-a875-9b84c3e0f126:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 720
+        'y': 210
+      z: 3
+      parent: 408b0e1b-85d9-45cf-b044-45078ce6ebdb
+      embeds: []
+      iscontainedinside:
+        - 408b0e1b-85d9-45cf-b044-45078ce6ebdb
+        - 408b0e1b-85d9-45cf-b044-45078ce6ebdb
+      dependson:
+        - e1c94314-e532-43ac-8050-e3b60512de37
+    631834ec-a14e-406a-8155-b078140dc90a:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 420
+        'y': 210
+      z: 3
+      parent: 68793b21-9649-4f9b-b6d9-f8e81b2bd242
+      embeds: []
+      isassociatedwith:
+        - 88bb6796-b32f-494b-a875-9b84c3e0f126
+      iscontainedinside:
+        - 68793b21-9649-4f9b-b6d9-f8e81b2bd242
+        - 68793b21-9649-4f9b-b6d9-f8e81b2bd242
+    0fd0dcd9-457d-4240-9fd4-d7cb709e362e:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 420
+        'y': 510
+      z: 3
+      parent: 00f4ccd5-b390-43b3-af8b-76af6e1977a5
+      embeds: []
+      iscontainedinside:
+        - 00f4ccd5-b390-43b3-af8b-76af6e1977a5
+        - 00f4ccd5-b390-43b3-af8b-76af6e1977a5
+      dependson:
+        - e1c94314-e532-43ac-8050-e3b60512de37
+    44230144-bd69-47ac-a231-831d15f290aa:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 120
+        'y': 210
+      z: 3
+      parent: 09ce3bc0-b11e-4bfc-9cee-7f604b057b9b
+      embeds: []
+      isassociatedwith:
+        - 0fd0dcd9-457d-4240-9fd4-d7cb709e362e
+      iscontainedinside:
+        - 09ce3bc0-b11e-4bfc-9cee-7f604b057b9b
+        - 09ce3bc0-b11e-4bfc-9cee-7f604b057b9b
+    ed9815ff-e779-47db-8b1d-e4e17a49de13:
+      size:
+        width: 150
+        height: 150
+      position:
+        x: 690
+        'y': 660
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds: []
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    24026253-e276-434d-8d7b-aed073c71819:
+      source:
+        id: 68793b21-9649-4f9b-b6d9-f8e81b2bd242
+      target:
+        id: ed9815ff-e779-47db-8b1d-e4e17a49de13
+      z: 2
+    4c0fb54a-774c-4fc5-9910-95947e50f74d:
+      size:
+        width: 150
+        height: 150
+      position:
+        x: 690
+        'y': 450
+      z: 2
+      parent: 8b229e29-b904-411f-a4af-9ad57dc37987
+      embeds: []
+      iscontainedinside:
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+        - 8b229e29-b904-411f-a4af-9ad57dc37987
+    305ef31f-eb2e-48a5-97f7-3bb14192a5f1:
+      size:
+        width: 220
+        height: 140
+      position:
+        x: -250
+        'y': 760
+      z: 1
+      embeds:
+        - 51ae513d-0c48-4009-bf57-6733e7af3891
+      iscontainedinside:
+        - 4c0fb54a-774c-4fc5-9910-95947e50f74d
+        - ed9815ff-e779-47db-8b1d-e4e17a49de13
+    51ae513d-0c48-4009-bf57-6733e7af3891:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: -220
+        'y': 820
+      z: 2
+      parent: 305ef31f-eb2e-48a5-97f7-3bb14192a5f1
+      embeds: []
+      isassociatedwith:
+        - df363dba-b7f8-43a9-9dd9-58a507fd0df1
+      iscontainedinside:
+        - 305ef31f-eb2e-48a5-97f7-3bb14192a5f1
+        - 305ef31f-eb2e-48a5-97f7-3bb14192a5f1
+    18df7a86-65b8-4841-859d-f964587101b0:
+      source:
+        id: 09ce3bc0-b11e-4bfc-9cee-7f604b057b9b
+      target:
+        id: 4c0fb54a-774c-4fc5-9910-95947e50f74d
+      z: 2
+Outputs:
+  WebsiteURL:
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - ApplicationLoadBalancer
+          - DNSName
+        - /wordpress
+    Description: WordPress Website
